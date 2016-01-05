@@ -10,28 +10,17 @@ var server = http.createServer(app)
 server.listen(port)
 
 console.log("http server listening on %d", port)
-// latest 100 messages
-var history = [ ];
-// list of currently connected clients (users)
-var clients = [ ];
 
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
 wss.on("connection", function(ws) {
-  console.log("websocket connection open, from:",ws)
-  // var id = setInterval(function() {
-  //   ws.send(JSON.stringify(new Date()), function() {  })
-  // }, 1000)
-  let index = clients.push(ws)
-  if(history.length>0){
-    ws.send(JSON.stringify( { type: 'history', data: history} ))
-  }
-  ws.on("message",function(msg){
-    console.log(msg);
-    history.push(msg);
-    history = history.slice(-100);
-  })
+  var id = setInterval(function() {
+    ws.send(JSON.stringify(new Date()), function() {  })
+  }, 1000)
+
+  console.log("websocket connection open")
+
   ws.on("close", function() {
     console.log("websocket connection close")
     clearInterval(id)
