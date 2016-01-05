@@ -26,7 +26,9 @@
   $(()=>{
     var ws = null;
     var gothist = false;
+    var runSocketTimeout = null;
     var runSocket = function runSocket(){
+      clearTimeout(runSocketTimeout)
       var promise = new Promise((resolve,reject)=>{
         if("WebSocket" in window){
           var host = location.origin.replace(/^http/, 'ws')
@@ -46,7 +48,7 @@
               if(data.type==='message'){
                 printMsg(data);
               }else if(data.type==='history' && gothist === false){
-                gothist = true;
+                // gothist = true;
                 $("#chat").val('');
                 for(var m of data.history){
                   printMsg(m)
@@ -55,7 +57,7 @@
             }
           }
           ws.onclose = function wsonclose(evt){
-            // setTimeout(runSocket,1000)
+            runSocketTimeout = setTimeout(runSocket,1000);
           }
           ws.onerror = function wsonerror(evt){
             console.error(evt);
