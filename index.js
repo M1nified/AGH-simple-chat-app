@@ -30,7 +30,7 @@ wss.on("connection", function(ws) {
     var ms;
     try{
       ms = JSON.parse(msg)
-    }catch{
+    }catch(e){
       ms = {};
       return;
     }
