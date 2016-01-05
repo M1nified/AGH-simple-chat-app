@@ -45,7 +45,7 @@
             if(data){
               if(data.type==='message'){
                 printMsg(data);
-              }else if(data.type==='history' && gothist === true){
+              }else if(data.type==='history' && gothist === false){
                 gothist = true;
                 $("#chat").val('');
                 for(var m of data.history){
