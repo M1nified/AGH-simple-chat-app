@@ -48,7 +48,7 @@ wss.on("connection", function(ws) {
       try{
         client.send(msg);
       }catch(e){
-        console.log('CLIENT EXCEPTION',e);
+        console.log('CLIENT EXCEPTION');
       }
     }
 
