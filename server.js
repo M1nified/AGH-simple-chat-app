@@ -23,10 +23,6 @@ console.log("websocket server created")
 
 wss.on("connection", function(ws) {
   var clindex = clients.push(ws);
-  // console.log(ws);
-  // var id = setInterval(function() {
-  //   ws.send(JSON.stringify(new Date()), function() {  })
-  // }, 1000)
   let histmsg = {
     type : "history",
     history
@@ -59,7 +55,6 @@ wss.on("connection", function(ws) {
   })
   ws.on("close", function() {
     console.log("websocket connection close")
-    // clearInterval(id)
     clients.splice(clindex,1)
   })
 })

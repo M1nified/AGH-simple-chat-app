@@ -1,20 +1,4 @@
 'use strict';
-// $(()=>{
-//   console.log(document.chat);
-//   $(document.form).on('submit',function(event){
-//     event.preventDefault();
-//     console.log('SUBMIT')
-//   })
-//   (function poll(){
-//     setTimeout(function(){
-//       $.ajax({ url: "server", success: function(data){
-//
-//         poll();
-//       }, dataType: "json"});
-//     }, 30000);
-//   })();
-// });
-
 $(()=>{
   var ws = null;
   var gothist = false;
@@ -54,7 +38,6 @@ $(()=>{
         ws.onerror = function wsonerror(evt){
           console.error(evt);
           // reject();
-          // setTimeout(runSocket,1000)
         }
       }else{
         reject('WebSocket NOT SUPPORTED');
@@ -65,16 +48,12 @@ $(()=>{
   runSocket();
   $(document.form).on('submit',function(event){
     event.preventDefault();
-    // console.log('SUBMIT')
-    // Construct a msg object containing the data the server needs to process the message from the chat client.
     var msg = {
       type: "message",
       text: $("#msg").val(),
       imie:   $("#imie").val() || 'anon',
       date: Date.now()
     };
-
-    // Send the msg object as a JSON-formatted string.
     if(!ws || ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
       runSocket().then(()=>{
         ws.send(JSON.stringify(msg));
@@ -84,8 +63,6 @@ $(()=>{
     }else{
       ws.send(JSON.stringify(msg));
     }
-
-    // Blank the text input element, ready to receive the next line of text from the user.
     $("#msg").val('');
   })
   $("#isActive").change(function(e){
