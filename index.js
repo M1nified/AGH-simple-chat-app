@@ -11,16 +11,21 @@ server.listen(port)
 
 console.log("http server listening on %d", port)
 
+var clients = [];
+
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
 wss.on("connection", function(ws) {
+  clients.push(ws);
   var id = setInterval(function() {
     ws.send(JSON.stringify(new Date()), function() {  })
   }, 1000)
 
   console.log("websocket connection open")
-
+  ws.on("message",function(msg){
+    console.log('message: ',msg);
+  })
   ws.on("close", function() {
     console.log("websocket connection close")
     clearInterval(id)
