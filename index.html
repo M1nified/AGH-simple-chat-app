@@ -44,10 +44,10 @@
           }
           if(data){
             if(data.type==='message'){
-              printMsg(data.data);
+              printMsg(data);
             }else if(data.type==='history'){
               $("#chat").val('');
-              for(var m of data.data){
+              for(var m of data){
                 printMsg(m)
               }
             }
