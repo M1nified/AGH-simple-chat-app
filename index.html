@@ -79,7 +79,15 @@
       };
 
       // Send the msg object as a JSON-formatted string.
-      ws.send(JSON.stringify(msg));
+      if(!ws || ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
+        runSocket().then(()=>{
+          ws.send(JSON.stringify(msg));
+        }).catch((err)=>{
+          console.error(err);
+        })
+      }else{
+        ws.send(JSON.stringify(msg));
+      }
 
       // Blank the text input element, ready to receive the next line of text from the user.
       $("#msg").val('');
@@ -94,15 +102,9 @@
   })
   var printMsg = function(data){
     console.log(data);
-    if(!ws || ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
-      runSocket().then(()=>{
-        var chat = $("#chat");
-        chat[0].value += '\n'+data.imie+': '+data.text;
-        chat.scrollTop(chat.prop('scrollHeight'));
-      }).catch((err)=>{
-        console.error(err);
-      })
-    }
+    var chat = $("#chat");
+    chat[0].value += '\n'+data.imie+': '+data.text;
+    chat.scrollTop(chat.prop('scrollHeight'));
   }
 
   </script>
