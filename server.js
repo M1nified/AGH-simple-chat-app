@@ -24,14 +24,12 @@ wss.on("connection", function(ws) {
   // var id = setInterval(function() {
   //   ws.send(JSON.stringify(new Date()), function() {  })
   // }, 1000)
-  ws.send((function(){
-    let histjson = JSON.stringify(history);
-    let json = {
-      type : "history",
-      history : histjson
-    }
-    return json;
-  }()))
+  let histjson = JSON.stringify(history);
+  let json = {
+    type : "history",
+    history : histjson
+  }
+  ws.send(json)
   console.log("websocket connection open")
   ws.on("message",function(msg){
     console.log('message: ',msg);
