@@ -20,10 +20,18 @@ console.log("websocket server created")
 
 wss.on("connection", function(ws) {
   let clindex = clients.push(ws);
+  console.log(ws);
   // var id = setInterval(function() {
   //   ws.send(JSON.stringify(new Date()), function() {  })
   // }, 1000)
-
+  ws.send((function(){
+    let history = JSON.stringify(history);
+    let json = {
+      type : "history",
+      history : history
+    }
+    return json;
+  }()))
   console.log("websocket connection open")
   ws.on("message",function(msg){
     console.log('message: ',msg);

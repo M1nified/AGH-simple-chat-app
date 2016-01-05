@@ -26,41 +26,45 @@
   $(()=>{
     var ws = null;
     var runSocket = function runSocket(){
-      if("WebSocket" in window){
-        // console.log('WEBSOCKET')
-        // ws = new WebSocket("ws://simple-chat-agh.herokuapp.com:1337");
-        var host = location.origin.replace(/^http/, 'ws')
-        ws = new WebSocket(host);
-        ws.opopen = function wsopen(){
-
-        }
-        ws.onmessage = function wsonmessage(msg){
-          console.log(msg);
-          var data = msg.data;
-          try{
-            data = JSON.parse(data);
-          }catch(e){
-            data = null;
+      var promise = new Promise((resolve,reject)=>{
+        if("WebSocket" in window){
+          var host = location.origin.replace(/^http/, 'ws')
+          ws = new WebSocket(host);
+          ws.onopen = function wsopen(){
+            resolve();
           }
-          if(data){
-            if(data.type==='message'){
-              printMsg(data);
-            }else if(data.type==='history'){
-              $("#chat").val('');
-              for(var m of data){
-                printMsg(m)
+          ws.onmessage = function wsonmessage(msg){
+            console.log(msg);
+            var data = msg.data;
+            try{
+              data = JSON.parse(data);
+            }catch(e){
+              data = null;
+            }
+            if(data){
+              if(data.type==='message'){
+                printMsg(data);
+              }else if(data.type==='history'){
+                $("#chat").val('');
+                for(var m of data.history){
+                  printMsg(m)
+                }
               }
             }
           }
+          ws.onclose = function wsonclose(evt){
+            // setTimeout(runSocket,1000)
+          }
+          ws.onerror = function wsonerror(evt){
+            console.error(evt);
+            // reject();
+            // setTimeout(runSocket,1000)
+          }
+        }else{
+          reject('WebSocket NOT SUPPORTED');
         }
-        ws.onclose = function wsonclose(evt){
-          // setTimeout(runSocket,1000)
-        }
-        ws.onerror = function wsonerror(evt){
-          console.error(evt);
-          // setTimeout(runSocket,1000)
-        }
-      }
+      })
+      return promise;
     };
     runSocket();
     $(document.form).on('submit',function(event){
@@ -90,15 +94,21 @@
   })
   var printMsg = function(data){
     console.log(data);
-    var chat = $("#chat");
-    chat[0].value += '\n'+data.imie+': '+data.text;
-    chat.scrollTop(chat.prop('scrollHeight'));
+    if(!ws || ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
+      runSocket().then(()=>{
+        var chat = $("#chat");
+        chat[0].value += '\n'+data.imie+': '+data.text;
+        chat.scrollTop(chat.prop('scrollHeight'));
+      }).catch((err)=>{
+        console.error(err);
+      })
+    }
   }
 
   </script>
 </head>
 <body>
-  <textarea id="chat" rows="8" cols="40"></textarea>
+  <textarea id="chat" rows="8" cols="40" readonly></textarea>
   <br>
   <input type="checkbox" id="isActive">
   <form class="" action="#" name=form>
