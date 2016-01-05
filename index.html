@@ -91,7 +91,7 @@
   var printMsg = function(data){
     console.log(data);
     var chat = $("#chat");
-    chat[0].value += '\n'+data.msg.imie+': '+data.msg.text;
+    chat[0].value += '\n'+data.imie+': '+data.text;
     chat.scrollTop(chat.prop('scrollHeight'));
   }
 
