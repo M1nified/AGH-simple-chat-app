@@ -25,10 +25,10 @@ wss.on("connection", function(ws) {
   //   ws.send(JSON.stringify(new Date()), function() {  })
   // }, 1000)
   ws.send((function(){
-    let history = JSON.stringify(history);
+    let histjson = JSON.stringify(history);
     let json = {
       type : "history",
-      history : history
+      history : histjson
     }
     return json;
   }()))
