@@ -20,7 +20,7 @@ console.log("websocket server created")
 
 wss.on("connection", function(ws) {
   let clindex = clients.push(ws);
-  console.log(ws);
+  // console.log(ws);
   // var id = setInterval(function() {
   //   ws.send(JSON.stringify(new Date()), function() {  })
   // }, 1000)
