@@ -25,6 +25,7 @@
 
   $(()=>{
     var ws = null;
+    var gothist = false;
     var runSocket = function runSocket(){
       var promise = new Promise((resolve,reject)=>{
         if("WebSocket" in window){
@@ -44,7 +45,8 @@
             if(data){
               if(data.type==='message'){
                 printMsg(data);
-              }else if(data.type==='history'){
+              }else if(data.type==='history' && gothist === true){
+                gothist = true;
                 $("#chat").val('');
                 for(var m of data.history){
                   printMsg(m)

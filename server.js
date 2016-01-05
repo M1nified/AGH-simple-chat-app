@@ -19,7 +19,7 @@ var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
 wss.on("connection", function(ws) {
-  let clindex = clients.push(ws);
+  var clindex = clients.push(ws);
   // console.log(ws);
   // var id = setInterval(function() {
   //   ws.send(JSON.stringify(new Date()), function() {  })
@@ -40,7 +40,7 @@ wss.on("connection", function(ws) {
       ms = {};
       return;
     }
-    history.push(msg);
+    history.push(ms);
     history = history.slice(-100);
     for(let client of clients){
       try{
