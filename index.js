@@ -23,7 +23,7 @@ wss.on("connection", function(ws) {
   // var id = setInterval(function() {
   //   ws.send(JSON.stringify(new Date()), function() {  })
   // }, 1000)
-  let index = clients.push(ws)
+  var index = clients.push(ws)
   if(history.length>0){
     ws.send(JSON.stringify( { type: 'history', data: history} ))
   }
