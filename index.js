@@ -37,7 +37,11 @@ wss.on("connection", function(ws) {
     history.push(msg);
     history = history.slice(-100);
     for(let client of clients){
-      client.send(msg);
+      try{
+        client.send(msg);
+      }catch(e){
+        console.log('CLIENT EXCEPTION',e);
+      }
     }
 
   })
