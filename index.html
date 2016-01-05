@@ -30,7 +30,7 @@
         // console.log('WEBSOCKET')
         // ws = new WebSocket("ws://simple-chat-agh.herokuapp.com:1337");
         var host = location.origin.replace(/^http/, 'ws')
-        var ws = new WebSocket(host);
+        ws = new WebSocket(host);
         ws.opopen = function wsopen(){
 
         }
