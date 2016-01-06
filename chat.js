@@ -10,7 +10,7 @@ $(()=>{
         var host = location.origin.replace(/^http/, 'ws')
         ws = new WebSocket(host);
         ws.onopen = function wsopen(){
-          resolve();
+          roomCall().then(resolve);
         }
         ws.onmessage = function wsonmessage(msg){
           console.log(msg);
@@ -46,6 +46,21 @@ $(()=>{
     return promise;
   };
   runSocket();
+  var ensureSocketCall = function(){
+    var promise = new Promise((resolve,reject)=>{
+      if(!ws || ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
+        runSocket().then(()=>{
+          resolve();
+        }).catch((err)=>{
+          console.error((err));
+          reject();
+        })
+      }else{
+        resolve();
+      }
+    })
+    return promise;
+  }
   $(document.form).on('submit',function(event){
     event.preventDefault();
     var msg = {
@@ -54,15 +69,20 @@ $(()=>{
       imie:   $("#imie").val() || 'anon',
       date: Date.now()
     };
-    if(!ws || ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
-      runSocket().then(()=>{
-        ws.send(JSON.stringify(msg));
-      }).catch((err)=>{
-        console.error(err);
-      })
-    }else{
+    // if(!ws || ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
+    //   runSocket().then(()=>{
+    //     ws.send(JSON.stringify(msg));
+    //   }).catch((err)=>{
+    //     console.error(err);
+    //   })
+    // }else{
+    //   ws.send(JSON.stringify(msg));
+    // }
+    ensureSocketCall().then(()=>{
       ws.send(JSON.stringify(msg));
-    }
+    }).catch(()=>{
+
+    })
     $("#msg").val('');
   })
   $("#isActive").change(function(e){
@@ -72,6 +92,27 @@ $(()=>{
       ws.close();
     }
   })
+  $(document.room).on('submit',function(event){
+    event.preventDefault();
+    roomCall();
+  })
+  var roomCall = function(){
+    var promise = new Promise((resolve,reject)=>{
+      var msg = {
+        type: "roomjoin",
+        roomname : $("#roomname").val() || null,
+        imie:   $("#imie").val() || 'anon',
+        date: Date.now()
+      };
+      ensureSocketCall().then(()=>{
+        ws.send(JSON.stringify(msg));
+        resolve();
+      }).catch(()=>{
+        resolve();
+      })
+    })
+    return promise;
+  }
 })
 var printMsg = function(data){
   console.log(data);
