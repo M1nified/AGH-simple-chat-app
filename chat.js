@@ -10,7 +10,8 @@ $(()=>{
         var host = location.origin.replace(/^http/, 'ws')
         ws = new WebSocket(host);
         ws.onopen = function wsopen(){
-          roomCall().then(resolve);
+          // roomCall().then(resolve);
+          resolve();
         }
         ws.onmessage = function wsonmessage(msg){
           console.log(msg);
@@ -96,23 +97,23 @@ $(()=>{
     event.preventDefault();
     roomCall();
   })
-  var roomCall = function(){
-    var promise = new Promise((resolve,reject)=>{
-      var msg = {
-        type: "roomjoin",
-        roomname : $("#roomname").val() || null,
-        imie:   $("#imie").val() || 'anon',
-        date: Date.now()
-      };
-      ensureSocketCall().then(()=>{
-        ws.send(JSON.stringify(msg));
-        resolve();
-      }).catch(()=>{
-        resolve();
-      })
-    })
-    return promise;
-  }
+  // var roomCall = function(){
+  //   var promise = new Promise((resolve,reject)=>{
+  //     var msg = {
+  //       type: "roomjoin",
+  //       roomname : $("#roomname").val() || null,
+  //       imie:   $("#imie").val() || 'anon',
+  //       date: Date.now()
+  //     };
+  //     ensureSocketCall().then(()=>{
+  //       ws.send(JSON.stringify(msg));
+  //       resolve();
+  //     }).catch(()=>{
+  //       resolve();
+  //     })
+  //   })
+  //   return promise;
+  // }
 })
 var printMsg = function(data){
   console.log(data);

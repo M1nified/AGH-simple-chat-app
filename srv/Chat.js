@@ -50,6 +50,7 @@ class Chat{
     console.log("WebSocket CLOSED");
   }
   sendToAllClients(msg){
+    console.log('send to all',this.clients.length,'clients');
     for(let i=0;i<this.clients.length;i++){
       let client = this.clients[i];
       try{
