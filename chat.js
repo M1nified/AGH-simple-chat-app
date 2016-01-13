@@ -9,7 +9,8 @@ $(()=>{
       if("WebSocket" in window){
         var host = location.origin.replace(/^http/, 'ws')
         ws = new WebSocket(host);
-        ws.onopen = function wsopen(){
+        ws.onopen = function wsopen(){\
+          // roomCall().then(resolve);\
           resolve();
         }
         ws.onmessage = function wsonmessage(msg){
@@ -72,6 +73,27 @@ $(()=>{
       ws.close();
     }
   })
+  $(document.room).on('submit',function(event){
+    event.preventDefault();
+    roomCall();
+  })
+  // var roomCall = function(){
+  //   var promise = new Promise((resolve,reject)=>{
+  //     var msg = {
+  //       type: "roomjoin",
+  //       roomname : $("#roomname").val() || null,
+  //       imie:   $("#imie").val() || 'anon',
+  //       date: Date.now()
+  //     };
+  //     ensureSocketCall().then(()=>{
+  //       ws.send(JSON.stringify(msg));
+  //       resolve();
+  //     }).catch(()=>{
+  //       resolve();
+  //     })
+  //   })
+  //   return promise;
+  // }
 })
 var printMsg = function(data){
   console.log(data);
