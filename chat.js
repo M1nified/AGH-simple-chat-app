@@ -1,7 +1,8 @@
 'use strict';
 $(()=>{
   var ws = null;
-  var gothist = false;
+  // var gothist = false;
+  var isActive = true;
   var runSocketTimeout = null;
   var runSocket = function runSocket(){
     clearTimeout(runSocketTimeout)
@@ -9,8 +10,8 @@ $(()=>{
       if("WebSocket" in window){
         var host = location.origin.replace(/^http/, 'ws')
         ws = new WebSocket(host);
-        ws.onopen = function wsopen(){\
-          // roomCall().then(resolve);\
+        ws.onopen = function wsopen(){
+          // roomCall().then(resolve);
           resolve();
         }
         ws.onmessage = function wsonmessage(msg){
@@ -24,7 +25,8 @@ $(()=>{
           if(data){
             if(data.type==='message'){
               printMsg(data);
-            }else if(data.type==='history' && gothist === false){
+            }else if(data.type==='history'){
+              // }else if(data.type==='history' && gothist === false){
               // gothist = true;
               $("#chat").val('');
               for(var m of data.history){
@@ -34,7 +36,9 @@ $(()=>{
           }
         }
         ws.onclose = function wsonclose(evt){
-          runSocketTimeout = setTimeout(runSocket,1000);
+          if(isActive){
+            runSocketTimeout = setTimeout(runSocket,1000);
+          }
         }
         ws.onerror = function wsonerror(evt){
           console.error(evt);
@@ -67,16 +71,17 @@ $(()=>{
     $("#msg").val('');
   })
   $("#isActive").change(function(e){
+    isActive = this.checked;
     if(this.checked){
       runSocket();
     }else{
       ws.close();
     }
   })
-  $(document.room).on('submit',function(event){
-    event.preventDefault();
-    roomCall();
-  })
+  // $(document.room).on('submit',function(event){
+  //   event.preventDefault();
+  //   roomCall();
+  // })
   // var roomCall = function(){
   //   var promise = new Promise((resolve,reject)=>{
   //     var msg = {

@@ -38,12 +38,14 @@ class Chat{
     }
     switch (msg.type) {
       case 'message':
+      // console.log('TEXT:',msg.text);
+      if(msg.text === '') break;
       this.historyPush(msg);
       this.sendToAllClients(msgjson);
       break;
-      case 'roomjoin':
-
-      break;
+      // case 'roomjoin':
+      //
+      // break;
     }
   }
   wsOnClose(){

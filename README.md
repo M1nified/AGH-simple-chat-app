@@ -2,6 +2,9 @@
 Simple group chat app based on `ws` module example `heroku-examples/node-ws-test`  
 Hosted on heroku.com: https://simple-chat-agh.herokuapp.com/
 
-### Required npm modules
+### Required node modules
 - `express`
 - `ws`
+
+## Author
+Michał Góra
